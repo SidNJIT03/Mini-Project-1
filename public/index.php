@@ -1,4 +1,4 @@
 <?php
 /** Created by PhpStorm.*/
 
-echo 'test';
+echo 'testwithGIT';
