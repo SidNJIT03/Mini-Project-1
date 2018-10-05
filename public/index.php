@@ -4,6 +4,11 @@ class main  {
     static public function start($filename) {
         $records = csv::getRecords($filename);
         $table = html::generateTable($records);
+        system::display($table);
+    }
+}
+class system  {
+    static public function display($table){
         echo $table;
     }
 }
