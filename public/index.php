@@ -1,9 +1,8 @@
 <?php
-
-main::start("Student_Database.csv");
+main::start();
 class main  {
-    static public function start($filename) {
-        $records = csv::getRecords($filename);
-        $table = html::generateTable($records);
+    static public function start() {
+        echo "Mini Project 1";
     }
 }
+
