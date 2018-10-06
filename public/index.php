@@ -14,20 +14,16 @@ class system  {
 }
 class html {
     public static function generateTable($records) {
-        $count = 0;
+        $headset = 0;
         foreach ($records as $record) {
-            if($count == 0) {
-                $array = $record->returnArray();
+            $array = $record->returnArray();
+            if($headset == 0) {
                 $fields = array_keys($array);
-                $values = array_values($array);
                 print_r($fields);
-                print_r($values);
-            } else {
-                $array = $record->returnArray();
-                $values = array_values($array);
-                print_r($values);
+                $headset =1;
             }
-            $count++;
+            $values = array_values($array);
+            print_r($values);
         }
     }
 }
