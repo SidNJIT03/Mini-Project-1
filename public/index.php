@@ -3,7 +3,13 @@ main::start("Student_Database.csv");
 class main  {
     static public function start($filename) {
         $records = csv::getRecords($filename);
-        $table = html::generateTable($records);
+        $table = htmlTags::openBasicTags();
+        $table .= htmlTags::openTableTags();
+        $table .= html::generateTable($records);
+        $table .= htmlTags::closeTableTags();
+        $table .= htmlTags::scriptTags();
+        $table .= htmlTags::closeBasicTags();
+
         system::display($table);
     }
 }
@@ -15,32 +21,65 @@ class system  {
 class html {
     public static function generateTable($records) {
         $headset = 0;
-        $tables = '<html><head><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">';
-        $tables .= '<style>table, th, td {border: 2px solid black; border-collapse: collapse;}th, td {padding: 25px;text-align: left;}/**th{background-color: aqua;}*/tr:nth-child(even){background-color: #f2f2f2;}</style>';
-        $tables .= '</head><body><table style="width:100%">';
+        $table = "";
         foreach ($records as $record) {
             $array = $record->returnArray();
             if($headset == 0) {
                 $fields = array_keys($array);
-                $tables .= '<tr>';
-                foreach($fields as $field) {
-                    $tables .= '<th>' . $field . '</th>';
-                }
-                $tables .= '</tr>';
+                $row = htmlTags::columnTableTags($fields,true);
+                $table .= htmlTags::trTableTags($row);
                 $headset =1;
             }
             $values = array_values($array);
-            $tables .= '<tr>';
-            foreach($values as $value){
-                $tables .= '<td>' . $value . '</td>';
-            }
-            $tables .= '</tr>';
+            $row = htmlTags::columnTableTags($values,false);
+            $table .= htmlTags::trTableTags($row);
         }
-        $tables .= '</table><script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>';
-        $tables .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>';
-        $tables .= '<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>';
-        $tables .= '</body></html>';
-        return $tables;
+        return $table;
+    }
+}
+class htmlTags {
+    static public function openBasicTags(){
+        $mains = '<html><head><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">';
+        $mains .= '<style>table, th, td {border: 2px solid black; border-collapse: collapse;}th, td {padding: 25px;text-align: left;}/**th{background-color: aqua;}*/tr:nth-child(even){background-color: #f2f2f2;}</style>';
+        $mains .= '</head><body>';
+        return $mains;
+    }
+    static public function openTableTags(){
+        $otables = '<table style="width:100%">';
+        return $otables;
+    }
+    static public function columnTableTags($fields, $thTag){
+        $row = "";
+        if($thTag == true){
+            $openingTag = "<th>";
+            $closingTag = "</th>";
+        }
+        else{
+            $openingTag = "<td>";
+            $closingTag = "</td>";
+        }
+        foreach($fields as $field){
+            $row .= $openingTag. $field .$closingTag;
+        }
+        return $row;
+    }
+    static public function trTableTags($data) {
+        $result = '<tr>'.$data.'</tr>';
+        return $result;
+    }
+    static public function closeTableTags(){
+        $ctables = '</table>';
+        return $ctables;
+    }
+    static public function scriptTags(){
+        $scripts = '<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>';
+        $scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>';
+        $scripts .= '<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>';
+        return $scripts;
+    }
+    static public function closeBasicTags(){
+        $close = '</body></html>';
+        return $close;
     }
 }
 class csv {
