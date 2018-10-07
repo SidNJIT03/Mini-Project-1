@@ -3,19 +3,19 @@ main::start("Student_Database.csv");
 class main  {
     static public function start($filename) {
         $records = csv::getRecords($filename);
-        $table = htmlTags::openBasicTags();
-        $table .= htmlTags::openTableTags();
-        $table .= html::generateTable($records);
-        $table .= htmlTags::closeTableTags();
-        $table .= htmlTags::scriptTags();
-        $table .= htmlTags::closeBasicTags();
+        $webPage = htmlTags::openBasicTags();
+        $webPage .= htmlTags::openTableTags();
+        $webPage .= html::generateTable($records);
+        $webPage .= htmlTags::closeTableTags();
+        $webPage .= htmlTags::scriptTags();
+        $webPage .= htmlTags::closeBasicTags();
 
-        system::display($table);
+        system::display($webPage);
     }
 }
 class system  {
-    static public function display($table){
-        echo $table;
+    static public function display($webPage){
+        echo $webPage;
     }
 }
 class html {
@@ -39,14 +39,14 @@ class html {
 }
 class htmlTags {
     static public function openBasicTags(){
-        $mains = '<html><head><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">';
-        $mains .= '<style>table, th, td {border: 2px solid black; border-collapse: collapse;}th, td {padding: 25px;text-align: left;}/**th{background-color: aqua;}*/tr:nth-child(even){background-color: #f2f2f2;}</style>';
-        $mains .= '</head><body>';
-        return $mains;
+        $open = '<html><head><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">';
+        $open .= '<style>table, th, td {border: 2px solid black; border-collapse: collapse;}th, td {padding: 25px;text-align: left;}/**th{background-color: aqua;}*/tr:nth-child(even){background-color: #f2f2f2;}</style>';
+        $open .= '</head><body>';
+        return $open;
     }
     static public function openTableTags(){
-        $otables = '<table style="width:100%">';
-        return $otables;
+        $openTables = '<table style="width:100%">';
+        return $openTables;
     }
     static public function columnTableTags($fields, $thTag){
         $row = "";
@@ -68,8 +68,8 @@ class htmlTags {
         return $result;
     }
     static public function closeTableTags(){
-        $ctables = '</table>';
-        return $ctables;
+        $closeTables = '</table>';
+        return $closeTables;
     }
     static public function scriptTags(){
         $scripts = '<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>';
