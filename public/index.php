@@ -3,13 +3,18 @@ main::start("Student_Database.csv");
 class main  {
     static public function start($filename) {
         $records = csv::getRecords($filename);
-        $webPage = htmlTags::openBasicTags();
-        $webPage .= htmlTags::openTableTags();
+        $webPage = htmlTags::openHtmlTag();
+        $webPage .= htmlTags::openHeadTag();
+        $webPage .= htmlTags::openLinkTag();
+        $webPage .= htmlTags::styleTag();
+        $webPage .= htmlTags::closeHeadTag();
+        $webPage .= htmlTags::openBodyTag();
+        $webPage .= htmlTags::openTableTag();
         $webPage .= html::generateTable($records);
-        $webPage .= htmlTags::closeTableTags();
+        $webPage .= htmlTags::closeTableTag();
         $webPage .= htmlTags::scriptTags();
-        $webPage .= htmlTags::closeBasicTags();
-
+        $webPage .= htmlTags::closeBodyTag();
+        $webPage .= htmlTags::closeHtmlTag();
         system::display($webPage);
     }
 }
@@ -24,61 +29,94 @@ class html {
         $table = "";
         foreach ($records as $record) {
             $array = $record->returnArray();
-            if($headset == 0) {
+            if ($headset == 0) {
                 $fields = array_keys($array);
-                $row = htmlTags::columnTableTags($fields,true);
-                $table .= htmlTags::trTableTags($row);
-                $headset =1;
+                $table .= htmlTags::openTableRowTag();
+                foreach ($fields as $field) {
+                    $table .= htmlTags::openTableHeadTag() . $field . htmlTags::closeTableHeadTag();
+                }
+                $table .= htmlTags::closeTableRowTag();
+                $headset = 1;
             }
             $values = array_values($array);
-            $row = htmlTags::columnTableTags($values,false);
-            $table .= htmlTags::trTableTags($row);
+            $table .= htmlTags::openTableRowTag();
+            foreach ($values as $value) {
+                $table .= htmlTags::openTableDataTag() . $value . htmlTags::closeTableDataTag();
+            }
+            $table .= htmlTags::closeTableRowTag();
         }
         return $table;
     }
 }
 class htmlTags {
-    static public function openBasicTags(){
-        $open = '<html><head><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">';
-        $open .= '<style>table, th, td {border: 2px solid black; border-collapse: collapse;}th, td {padding: 25px;text-align: left;}/**th{background-color: aqua;}*/tr:nth-child(even){background-color: #f2f2f2;}</style>';
-        $open .= '</head><body>';
-        return $open;
+    static public function openHtmlTag(){
+        $openHtml = '<html>';
+        return $openHtml;
     }
-    static public function openTableTags(){
+    static public function openHeadTag(){
+        $openHead = '<head>';
+        return $openHead;
+    }
+    static public function openLinkTag(){
+        $openLink = '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">';
+        return $openLink;
+    }
+    static public function styleTag(){
+        $style = '<style>table, th, td {border: 2px solid black; border-collapse: collapse;}th, td {padding: 25px;text-align: left;}/**th{background-color: aqua;}*/tr:nth-child(even){background-color: #f2f2f2;}</style>';
+        return $style;
+    }
+    static public function closeHeadTag(){
+        $closeHead = '</head>';
+        return $closeHead;
+    }
+    static public function openBodyTag(){
+        $openBody = '<body>';
+        return $openBody;
+    }
+    static public function openTableTag(){
         $openTables = '<table style="width:100%">';
         return $openTables;
     }
-    static public function columnTableTags($fields, $thTag){
-        $row = "";
-        if($thTag == true){
-            $openingTag = "<th>";
-            $closingTag = "</th>";
-        }
-        else{
-            $openingTag = "<td>";
-            $closingTag = "</td>";
-        }
-        foreach($fields as $field){
-            $row .= $openingTag. $field .$closingTag;
-        }
-        return $row;
+    static public function openTableRowTag(){
+        $openTableRow = '<tr>';
+        return $openTableRow;
     }
-    static public function trTableTags($data) {
-        $result = '<tr>'.$data.'</tr>';
-        return $result;
+    static public function openTableHeadTag(){
+        $openTableHead = '<th>';
+        return $openTableHead;
     }
-    static public function closeTableTags(){
+    static public function closeTableHeadTag(){
+        $closeTableHead = '</th>';
+        return $closeTableHead;
+    }
+    static public function openTableDataTag(){
+        $openTableData = '<td>';
+        return $openTableData;
+    }
+    static public function closeTableDataTag(){
+        $closeTableData = '</td>';
+        return $closeTableData;
+    }
+    static public function closeTableRowTag(){
+        $closeTableRow = '</tr>';
+        return $closeTableRow;
+    }
+    static public function closeTableTag(){
         $closeTables = '</table>';
         return $closeTables;
     }
     static public function scriptTags(){
-        $scripts = '<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>';
-        $scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>';
-        $scripts .= '<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>';
-        return $scripts;
+        $script = '<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>';
+        $script .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>';
+        $script .= '<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>';
+        return $script;
     }
-    static public function closeBasicTags(){
-        $close = '</body></html>';
+    static public function closeBodyTag(){
+        $close = '</body>';
+        return $close;
+    }
+    static public function closeHtmlTag(){
+        $close = '</html>';
         return $close;
     }
 }
